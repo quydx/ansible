@@ -1,0 +1,12 @@
+--- 
+- name: change config 
+  template: src={{ item }} dest=/etc/clickhouse-server/{{ item }}
+  with_items:
+    - config.xml
+    - users.xml 
+    - metrika.xml
+
+- name: restart clickhouse
+  service:
+    name: clickhouse-server
+    state: restarted

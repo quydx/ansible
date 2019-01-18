@@ -1,0 +1,45 @@
+---
+- name: install java jdk8
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: install curl 
+  yum:
+    name: curl
+    state: present
+
+- name: download install bash script
+  command: curl -o /root/script.rpm.sh https://packagecloud.io/install/repositories/altinity/clickhouse/script.rpm.sh 
+
+- name: run bash script 
+  command: bash /root/script.rpm.sh
+
+- name: install clickhouse package 
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - clickhouse-server
+    - clickhouse-client
+
+- name: create clickhouse directory
+  command: mkdir -p /data/clickhouse
+
+- name: create config.xml users.xml metrica.xml
+  template: src={{ item }} dest=/data/clickhouse/{{ item }}
+  with_items:
+    - config.xml
+    - metrika.xml
+    - users.xml 
+
+- name: enable clickhouse
+  service:
+    name: clickhouse-server
+    enabled: yes
+
+- name: Start service httpd, if not started
+  service:
+    name: clickhouse-server
+    state: started
+

@@ -1,0 +1,7 @@
+---
+- hosts: clickhouse_servers
+  gather_facts: yes
+  remote_user: root
+  become: no
+  roles:
+    - reconfig
