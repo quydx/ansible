@@ -1,0 +1,115 @@
+#- setup variable for cluster installation
+#- kubernetes dir
+kube_config_dir: /etc/kubernetes
+manifest_config_dir: /etc/kubernetes/manifests
+cert_dir: /etc/kubernetes/pki
+master_cert_dir: /opt/kubernetes/pki
+kube_addon_dir: /etc/kubernetes/addon
+flannel_dir: /etc/sysconfig
+
+#- get k8s version
+k8s_version: "v1.11.3"
+
+#- image and other variable
+api_image: gcr.io/google_containers/kube-apiserver-amd64:v1.11.3
+controller_image: gcr.io/google_containers/kube-controller-manager-amd64:v1.11.3
+scheduler_image: gcr.io/google_containers/kube-scheduler-amd64:v1.11.3
+kube_proxy_image: gcr.io/google_containers/kube-proxy-amd64:v1.11.3
+etcd_image: k8s.gcr.io/etcd:3.2.24
+
+#- cluster service ip range
+service_ip_range: 10.96.0.0/24
+kubernetes_service_ip: 10.96.0.1  #- IP of default kubernetes service, it is the first IP of network CIDR range
+
+#- all certifactes for cluster  
+ca_cert: /etc/kubernetes/pki/ca.pem
+ca_key: /etc/kubernetes/pki/ca-key.pem
+admin_key: /etc/kubernetes/pki/admin-key.pem
+admin_cert: /etc/kubernetes/pki/admin.pem
+node_cert: /etc/kubernetes/pki/node.pem
+node_key: /etc/kubernetes/pki/node-key.pem
+controller_cert: /etc/kubernetes/pki/controller.pem
+controller_key: /etc/kubernetes/pki/controller-key.pem
+scheduler_cert: /etc/kubernetes/pki/scheduler.pem
+scheduler_key: /etc/kubernetes/pki/scheduler-key.pem
+
+#- api secure port and api loadbalancer IP
+api_secure_port: 6443
+api_lb_ip: https://192.168.158.55 # it should be haproxy host IP or network load balancer IP  # if using onle one api server then setup IP of it
+lb_ip: 192.168.158.55
+
+#-use keepalived for api HA if only one master node then set it to false
+keepalived: true
+
+#- kubeconfig file 
+kubeadminconfig: /etc/kubernetes/kubeadminconfig
+
+# all master fqdn name - it require to create ssl certificate
+# set it to only available api server
+masters_fqdn: ['quydx-k8s-1.novalocal', 'quydx-k8s-2.novalocal', 'quydx-k8s-3.novalocal']
+domain_name: novalocal #- use to create wildcard ssl certificate for api and etcd
+
+#- cluster dns name and IP
+cluster_name: cluster.local
+
+#- api authorization RBAC
+auth_mode: Node,RBAC
+
+# kube-proxy addon
+kube_proxy: true # set true only if cluster is fully operation and running
+
+#- kube-dns add-on
+kube_dns: true # set true only if cluster is fully operation and running
+#- if true then set following
+dns_ip: 10.96.0.10 # it should be from cluster service_ip_range
+dns_replicas: 1
+
+#flannel network # only one network plugin should be enable either weave or flannel
+flannel: true
+flannel_network: "10.244.0.0/16"
+
+#-metrics-server
+metrics_server: true
+
+#- setup haproxy for loadbalancing
+haproxy: true  # set false when already physical loadbalancer available
+haproxy_dir: /etc/haproxy
+haproxy_monitor_port: 9090
+haadmin_user: admin
+haadmin_password: admin123
+
+#- below require interface name, most system it has eth0, but if there is bonding then it bond, or using vagrant with nat with it is eth1, set accrodingly
+#- for keepalived
+keepalived_shared_iface: eth0
+#- for etcd 
+etcd_interface: eth0
+#- for kube-api server
+bind_interface: eth0
+
+#- etcd config
+etcd_client_port: 2379
+etcd_peer_port: 2380
+etcd_peers_group: etcd
+etcd_conf_dir: /etc/etcd
+etcd_initial_cluster_state: new
+etcd_initial_cluster_token: etcd-k8-cluster
+etcd_data_dir: /var/lib/etcd
+etcd_peer_url_scheme: https
+etcd_ca_file: "/etc/kubernetes/pki/ca.pem"
+etcd_cert_file: "/etc/kubernetes/pki/etcd.pem"
+etcd_key_file: "/etc/kubernetes/pki/etcd-key.pem"
+etcd_peer_ca_file: "/etc/kubernetes/pki/ca.pem"
+etcd_peer_cert_file: "/etc/kubernetes/pki/etcd.pem"
+etcd_peer_key_file: "/etc/kubernetes/pki/etcd-key.pem"
+
+#- proxy configuration of yum repositories
+# -> uncomment if running with vagrant
+#yum_proxy: "http://192.168.50.99:3128"
+yum_proxy: ""
+
+#- use containerd instead of docker
+use_containerd: "false"
+containerd_release_version: 1.1.0-rc.0
+cni_bin_dir: /opt/cni/bin/
+cni_conf_dir: /etc/cni/net.d/
+cni_version: v0.7.1

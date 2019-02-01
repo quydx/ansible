@@ -1,0 +1,39 @@
+---
+## zookeeper section
+# - name: install java
+#   command: yum localinstall http://repo.data.platfio.com/tools/jdk-8u172-linux-x64.rpm -y
+#
+# - name: set java path in bashrc
+#   lineinfile:
+#     path: /etc/bashrc
+#     line: "{{ item }}"
+#   with_items:
+#     - export PATH=$PATH:/usr/java/jdk1.8.0_172-amd64/bin/
+#     - export JAVA_HOME=/usr/java/jdk1.8.0_172-amd64
+#     #insertbefore: BOF
+# - name: source bashrc
+#   shell: source /etc/bashrc && echo 1
+#
+# - name: backup zookeeper default config
+#   command: mv /etc/kafka/zookeeper.properties /etc/kafka/zookeeper.properties.default
+#
+# - name: replace config zookeeper
+#   template: src=zookeeper.properties dest=/etc/kafka/zookeeper.properties
+#
+##kafka section
+# - name: set heapsize 8G kafka
+  # command: sed -i -e 's/-Xmx8G -Xms8G/-Xmx2G -Xms2G/g' /bin/kafka-server-start
+#
+# - name: backup kafka default config
+#   command: mv /etc/kafka/server.properties /etc/kafka/server.properties.default
+#
+- name: replace kafka config
+  template: src=server.properties dest=/etc/kafka/server.properties
+# - name: restart zookeeper
+#   service:
+#     name: zookeeper
+#     state: restarted
+- name: restart kafka 
+  service: 
+    name: kafka
+    state: restarted

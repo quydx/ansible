@@ -1,0 +1,7 @@
+[master_node]
+192.168.158.216
+[datanode1]
+192.168.158.217 ansible_ssh_user=root
+[datanode2]
+192.168.158.218 ansible_ssh_user=root
+

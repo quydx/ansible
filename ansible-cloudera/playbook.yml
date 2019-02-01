@@ -1,0 +1,10 @@
+---
+- hosts: cloudera_servers
+  gather_facts: yes
+  remote_user: root
+  become: no
+  # vars:
+  #   cluster_name: Cassandra-Vega
+  #   seeds: 103.216.120.190,103.216.120.195,171.244.36.134
+  roles:
+    - presetup

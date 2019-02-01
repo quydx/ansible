@@ -1,0 +1,44 @@
+---
+- name: install git 
+  yum:
+    name: git
+    state: present
+
+# - name: clone github script repo
+#   git:
+#     repo: 'https://github.com/quydx/scripts.git'
+#     dest: /root/scripts
+#
+# - name: run script setup host
+#   command: bash /root/scripts/setup_lab.sh
+
+- name: add hostname to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    - 192.168.158.102 quydx-cloudera-1.novalocal cd1
+    - 192.168.158.106 quydx-cloudera-2.novalocal cd2
+    - 192.168.158.107 quydx-cloudera-3.novalocal cd3
+    - 192.168.158.127 quydx-cloudera-4.novalocal cd4
+
+- name: Disable IPv6 with sysctl
+  sysctl: name={{ item }} value=1 state=present
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+
+- name: install java jdk8
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+# Disable SELinux
+- name: disable selinux  
+  selinux:
+    state: disabled
+
+- name: setup ntp 
+  nxos_ntp:
+    server: 0.pool.ntp.org
+    prefer: enabled

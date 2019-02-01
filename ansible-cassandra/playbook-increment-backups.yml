@@ -1,0 +1,13 @@
+---
+- hosts: cassandra_servers
+  gather_facts: yes
+  remote_user: root
+  become: no
+  tasks:
+    - lineinfile: 
+        path: /etc/cassandra/conf/cassandra.yaml
+        regexp: '^incremental_backups:'
+        line: 'incremental_backups: true'
+    - service:
+        name: cassandra
+        state: restarted

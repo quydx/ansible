@@ -1,0 +1,3 @@
+---
+zk_cluster: clh1:2181,clh2:2181,clh3:2181/kafka
+

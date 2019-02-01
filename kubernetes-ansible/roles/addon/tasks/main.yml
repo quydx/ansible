@@ -1,0 +1,44 @@
+---
+- name: create kubernetes addon directory
+  file: path={{ kube_addon_dir }} state=directory
+  register: addon_dir
+
+- name: copy kube-proxy config file
+  when: kube_proxy
+  template: src=kube-proxy.yaml.j2 dest={{ kube_addon_dir }}/kube-proxy.yaml
+
+- name: copy flannel config file
+  when: flannel
+  template: src=kube-flannel.yaml.j2 dest={{ kube_addon_dir }}/kube-flannel.yaml
+
+- name: copy kube-dns config file
+  when: kube_dns
+  template: src=coredns.yaml.j2 dest={{ kube_addon_dir }}/coredns.yaml
+
+- name: copy metrics-server
+  when: metrics_server
+  template: src=metrics-server.yaml.j2 dest={{ kube_addon_dir }}/metrics-server.yaml
+
+- name: create kube-proxy
+  when: kube_proxy 
+  shell: "kubectl apply --kubeconfig={{ kubeadminconfig }} -f {{ kube_addon_dir }}/kube-proxy.yaml"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
+- name: create kube-flannel
+  when: flannel
+  shell: "kubectl apply --kubeconfig={{ kubeadminconfig }} -f {{ kube_addon_dir }}/kube-flannel.yaml"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
+- name: create kube-dns
+  when: kube_dns
+  shell: "kubectl apply --kubeconfig={{ kubeadminconfig }} -f {{ kube_addon_dir }}/coredns.yaml"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
+- name: create metrics-server
+  when: metrics_server
+  shell: "kubectl apply --kubeconfig={{ kubeadminconfig }} -f {{ kube_addon_dir }}/metrics-server.yaml"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true

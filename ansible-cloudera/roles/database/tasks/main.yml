@@ -1,0 +1,111 @@
+--- 
+# - name: install mysql
+#   command: "{{ item }}"
+#   with_items:
+#     - wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm -P /root
+#     - sudo rpm -ivh /root/mysql-community-release-el7-5.noarch.rpm
+#     - sudo yum update
+#     - sudo yum install mysql-server
+#
+# - name: move old mysql file
+#   command: mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 /root
+#   when: /var/lib/mysql/ib_logfile0.stat.exists or /var/lib/mysql/ib_logfile1.stat.exists
+  
+# - name: configure mysqld
+#   template: src=my.cnf dest=/etc/my.cnf
+#
+# - name: enable mysqld
+#   service:
+#     name: mysqld
+#     enabled: yes
+#
+# - name: start mysqld
+#   service:
+#     name: mysqld
+#     state: started
+#
+# - name: Adds Python MySQL support on RedHat/CentOS
+#   yum: name=MySQL-python state=present
+#   when: ansible_os_family == 'RedHat'
+#
+# - name: Sets the root password
+#   mysql_user: user=root password="p@ssw0rd" host=localhost
+#
+# - name: Install mysql JDBC driver
+#   command: "{{ item }}"
+#   with_items:
+#     - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz -P /root
+#     - tar zxvf /root/mysql-connector-java-5.1.46.tar.gz
+#     - sudo mkdir -p /usr/share/java/
+#     - sudo cp /root/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
+
+# - name: create mysql databases
+#   command: mysql -u root -pp@ssw0rd -e "create database {{ item }} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci";
+#   with_items:
+#     - scm
+#     - amon
+#     - rman
+#     - hue
+#     - hive
+#     - sentry
+#     - nav
+#     - navms
+#     - oozie
+#
+# - name: create mysql users
+#   command: mysql -u root -pp@ssw0rd  -e "GRANT ALL ON {{ item }}.* TO '{{ item }}'@'%' IDENTIFIED BY 'p@ssw0rd'"
+#   with_items:
+#     - scm
+#     - amon
+#     - rman
+#     - hue
+#     - hive
+#     - sentry
+#     - nav
+#     - navms
+#     - oozie
+#
+# - name: create mysql users
+#   command: mysql -u root -pp@ssw0rd  -e "GRANT ALL ON {{ item }}.* TO '{{ item }}'@'%' IDENTIFIED BY 'p@ssw0rd'"
+#   with_items:
+#     - scm
+#     - amon
+#     - rman
+#     - hue
+#     - hive
+#     - sentry
+#     - nav
+#     - navms
+#     - oozie
+
+# - name: update password users
+#   command: mysql -u root -pp@ssw0rd  -e "UPDATE mysql.user SET password=PASSWORD('p@ssw0rd') WHERE user='{{ item }}' AND Host='localhost';"
+#   with_items:
+#     - scm
+#     - amon
+#     - rman
+#     - hue
+#     - hive
+#     - sentry
+#     - nav
+#     - navms
+#     - oozie
+#
+# - name: Deletes anonymous MySQL server user for ansible_fqdn
+#   mysql_user: user="" host="{{ ansible_fqdn }}" state="absent"
+
+# - name: Deletes anonymous MySQL server user for localhost
+#   mysql_user: user="" state="absent"
+
+- name: flush privileges mysql
+  command: mysql -u root -pp@ssw0rd  -e "FLUSH PRIVILEGES;"
+
+
+
+
+
+
+
+
+
+
