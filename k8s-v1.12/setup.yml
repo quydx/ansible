@@ -1,0 +1,45 @@
+---
+- hosts: k8s_masters 
+  remote_user: root
+  tasks:
+  - name: Add an apt key by id from a keyserver
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+
+  - name: register file 
+    stat:
+      path: "/etc/apt/sources.list.d/kubernetes.list"
+    register: p
+
+  - name: create repo kubernetes file
+    file: 
+      path: /etc/apt/sources.list.d/kubernetes.list
+      owner: root
+      group: root
+      mode: 0644
+      state: '{{ "file" if p.stat.exists else "touch" }}'
+
+  - name: Write repo content 
+    shell: |
+      echo 'deb http://apt.kubernetes.io/ kubernetes-xenial main' >> /etc/apt/sources.list.d/kubernetes.list
+
+  - name: Run the equivalent of apt-get update as a separate step
+    apt:
+      update_cache: yes
+
+  - name: install all  packages 
+    command: apt-get install -y docker.io kubelet kubeadm kubectl kubernetes-cni --allow-unauthenticated
+    
+
+
+
+
+
+
+
+
+
+
+
+
