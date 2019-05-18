@@ -1,0 +1,18 @@
+---
+- hosts: cloudera_servers
+  remote_user: root
+  tasks:
+  # - name: make direcotry
+  #   file:
+  #     path: "/home/vega/.ssh"
+  #     state: directory
+  # - name: create empty file
+  #   file:
+  #     path: "/home/vega/.ssh/authorized_keys"
+  #     state: touch
+  # - name:
+    # lineinfile: dest=/root/.ssh/authorized_keys state=absent regexp="tail"
+  - name: put pubkey
+    lineinfile:
+      path: "/root/.ssh/authorized_keys"
+      line: "{{ pubkey }}"

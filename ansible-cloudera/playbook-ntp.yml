@@ -1,0 +1,5 @@
+---
+- hosts: cloudera_servers
+  roles:
+    - ansible-role-ntp
+
