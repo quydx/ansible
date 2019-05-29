@@ -1,26 +1,27 @@
 ---
-- name: install git 
+- name: install vim
   yum:
-    name: git
+    name: vim
     state: present
 
-# - name: clone github script repo
-#   git:
-#     repo: 'https://github.com/quydx/scripts.git'
-#     dest: /root/scripts
-#
-# - name: run script setup host
-#   command: bash /root/scripts/setup_lab.sh
+- name: Copy javajdk rpm with owner and permissions
+  copy:
+    src: /root/jdk-8u202-linux-x64.rpm
+    dest: /root/jdk-8u202-linux-x64.rpm
+    owner: root
+    group: root
+    mode: '0777'
 
 - name: add hostname to /etc/hosts
   lineinfile:
     path: /etc/hosts
     line: "{{ item }}"
   with_items:
-    - 192.168.158.102 quydx-cloudera-1.novalocal cd1
-    - 192.168.158.127 quydx-cloudera-2.novalocal cd2
-    - 192.168.158.106 quydx-cloudera-3.novalocal cd3
-    - 192.168.158.107 quydx-cloudera-4.novalocal cd4
+    - 172.18.10.200 vega-bi-r01m01.platfio.com vega-bi-r01m01
+    - 172.18.10.201 vega-bi-r01n01.platfio.com vega-bi-r01n01
+    - 172.18.10.202 vega-bi-r01n02.platfio.com vega-bi-r01n02
+    - 172.18.10.203 vega-bi-r01d01.platfio.com vega-bi-r01d01
+    - 172.18.10.204 vega-bi-r02d02.platfio.com vega-bi-r02d02
 
 - name: Disable IPv6 with sysctl
   sysctl: name={{ item }} value=1 state=present
@@ -31,14 +32,48 @@
 
 - name: install java jdk8
   yum:
-    name: java-1.8.0-openjdk
+    name: /root/jdk-8u202-linux-x64.rpm
     state: present
+
+- name: Insert a line at the end of a file.
+  lineinfile:
+    path: /etc/bashrc
+    line: "{{ item }}"
+  with_items:
+    - export PATH=$PATH:/usr/java/jdk1.8.0_202-amd64/bin/
+    - export JAVA_HOME=/usr/java/jdk1.8.0_202-amd64
+
+- name: source bashrc
+  shell: source /etc/bashrc && echo $JAVA_HOME
+
 # Disable SELinux
 - name: disable selinux  
   selinux:
     state: disabled
 
-# - name: setup ntp
-#   nxos_ntp:
-#     server: 0.pool.ntp.org
-#     prefer: enabled
+- name: install ntp
+  yum:
+    name: ntp
+    state: present
+
+- name: Enable service ntpd, and not touch the state
+  service:
+    name: ntpd
+    enabled: yes
+
+- name: change area ntp
+  shell: sed -i 's/centos/asia/g' /etc/ntp.conf
+
+- name: Start service ntpd, if not started
+  service:
+    name: ntpd
+    state: started
+
+- name: update time ntp
+  shell: ntpdate -u 0.asia.pool.ntp.org
+
+- name: Synchronize the hardware clock to the system clock
+  shell: hwclock --systohc
+
+- name: check date
+  shell: date

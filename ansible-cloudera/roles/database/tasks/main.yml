@@ -1,15 +1,15 @@
 --- 
-# - name: install mysql
-#   command: "{{ item }}"
-#   with_items:
-#     - wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm -P /root
-#     - sudo rpm -ivh /root/mysql-community-release-el7-5.noarch.rpm
-#     - sudo yum update
-#     - sudo yum install mysql-server
+ - name: install mysql
+   command: "{{ item }}"
+   with_items:
+     - wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm -P /root
+     - sudo rpm -ivh /root/mysql-community-release-el7-5.noarch.rpm
+     - sudo yum update
+     - sudo yum install mysql-server
 
-# - name: move old mysql file
-#   command: mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 /root
-#   when: /var/lib/mysql/ib_logfile0.stat.exists or /var/lib/mysql/ib_logfile1.stat.exists
+ - name: move old mysql file
+   command: mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 /root
+   when: /var/lib/mysql/ib_logfile0.stat.exists or /var/lib/mysql/ib_logfile1.stat.exists
 
 - name: configure mysqld
   template: src=my.cnf dest=/etc/my.cnf

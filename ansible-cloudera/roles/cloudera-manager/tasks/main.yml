@@ -7,13 +7,13 @@
 - name: install cloudera repo 
   command: "{{ item }}"
   with_items:
-    - wget https://archive.cloudera.com/cm6/6.1.0/redhat7/yum/cloudera-manager.repo -P /etc/yum.repos.d/
-    - sudo rpm --import https://archive.cloudera.com/cm6/6.1.0/redhat7/yum/RPM-GPG-KEY-cloudera
+    - wget https://archive.cloudera.com/cm6/6.2.0/redhat7/yum/cloudera-manager.repo -P /etc/yum.repos.d/
+    - rpm --import https://archive.cloudera.com/cm6/6.2.0/redhat7/yum/RPM-GPG-KEY-cloudera
 
-- name: install oracle jdk 
-  yum:
-    name: oracle-j2sdk1.8
-    state: present
+#- name: install oracle jdk
+#  yum:
+#    name: oracle-j2sdk1.8
+#    state: present
 
 - name: install cloudera manager package
   yum: 
@@ -24,7 +24,7 @@
     - cloudera-manager-server
 
 - name: enable TLS-automations
-  command: sudo JAVA_HOME=/usr/java/jdk1.8.0_141-cloudera /opt/cloudera/cm-agent/bin/certmanager setup --configure-services
+  command: sudo JAVA_HOME=/usr/java/jdk1.8.0_202-amd64 /opt/cloudera/cm-agent/bin/certmanager setup --configure-services
 
 
 
