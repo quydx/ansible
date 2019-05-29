@@ -61,8 +61,8 @@
     name: ntpd
     enabled: yes
 
-- name: change area ntp
-  shell: sed -i 's/centos/asia/g' /etc/ntp.conf
+- name: replace ntp config
+  template: src=ntp.conf dest=/etc/ntp.conf
 
 - name: Start service ntpd, if not started
   service:
@@ -70,7 +70,7 @@
     state: started
 
 - name: update time ntp
-  shell: ntpdate -u 0.asia.pool.ntp.org
+  shell: ntpdate -u time.google.com
 
 - name: Synchronize the hardware clock to the system clock
   shell: hwclock --systohc
