@@ -17,11 +17,11 @@
     path: /etc/hosts
     line: "{{ item }}"
   with_items:
-    - 172.18.10.200 vega-bi-r01m01.platfio.com vega-bi-r01m01
-    - 172.18.10.201 vega-bi-r01n01.platfio.com vega-bi-r01n01
-    - 172.18.10.202 vega-bi-r01n02.platfio.com vega-bi-r01n02
-    - 172.18.10.203 vega-bi-r01d01.platfio.com vega-bi-r01d01
-    - 172.18.10.204 vega-bi-r02d02.platfio.com vega-bi-r02d02
+    - 192.168.158.218 vega-bi-r01m01.platfio.com vega-bi-r01m01
+    - 192.168.158.219 vega-bi-r01n01.platfio.com vega-bi-r01n01
+    - 192.168.158.236 vega-bi-r01n02.platfio.com vega-bi-r01n02
+    - 192.168.158.237 vega-bi-r01d01.platfio.com vega-bi-r01d01
+    - 192.168.158.238 vega-bi-r02d02.platfio.com vega-bi-r02d02
 
 - name: Disable IPv6 with sysctl
   sysctl: name={{ item }} value=1 state=present
