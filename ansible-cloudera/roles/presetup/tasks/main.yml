@@ -50,6 +50,8 @@
 - name: disable selinux  
   selinux:
     state: disabled
+- name: set timezone
+  shell: timedatectl set-timezone Asia/Ho_Chi_Minh
 
 - name: install ntp
   yum:
