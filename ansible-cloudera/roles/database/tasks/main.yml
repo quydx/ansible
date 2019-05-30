@@ -31,13 +31,13 @@
 - name: Sets the root password
   mysql_user: user=root password="Vega@123" host=localhost
 
-- name: Install mysql JDBC driver
-  command: "{{ item }}"
-  with_items:
-    - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz -P /root
-    - tar zxvf /root/mysql-connector-java-5.1.46.tar.gz
-    - sudo mkdir -p /usr/share/java/
-    - sudo cp /root/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
+#- name: Install mysql JDBC driver
+#  command: "{{ item }}"
+#  with_items:
+#    - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz -P /root
+#    - tar zxvf /root/mysql-connector-java-5.1.46.tar.gz
+#    - sudo mkdir -p /usr/share/java/
+#    - sudo cp /root/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
 
 - name: create mysql databases
   command: mysql -u root -pp@ssw0rd -e "create database {{ item }} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci";

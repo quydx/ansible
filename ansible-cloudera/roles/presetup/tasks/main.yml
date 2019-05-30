@@ -84,3 +84,11 @@
 
 - name: check date
   shell: date
+
+- name: Install mysql JDBC driver
+  command: "{{ item }}"
+  with_items:
+    - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz -P /root
+    - tar zxvf /root/mysql-connector-java-5.1.46.tar.gz
+    - sudo mkdir -p /usr/share/java/
+    - sudo cp /root/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar

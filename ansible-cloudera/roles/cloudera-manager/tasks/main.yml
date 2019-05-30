@@ -23,8 +23,8 @@
     - cloudera-manager-agent
     - cloudera-manager-server
 
-- name: enable TLS-automations
-  command: sudo JAVA_HOME=/usr/java/jdk1.8.0_202-amd64 /opt/cloudera/cm-agent/bin/certmanager setup --configure-services
+#- name: enable TLS-automations
+#  command: sudo JAVA_HOME=/usr/java/jdk1.8.0_202-amd64 /opt/cloudera/cm-agent/bin/certmanager setup --configure-services
 
 
 
