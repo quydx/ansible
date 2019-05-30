@@ -4,6 +4,11 @@
     name: vim
     state: present
 
+- name: install wget if not
+  yum:
+    name: wget
+    state: present
+
 - name: Copy javajdk rpm with owner and permissions
   copy:
     src: /root/jdk-8u202-linux-x64.rpm

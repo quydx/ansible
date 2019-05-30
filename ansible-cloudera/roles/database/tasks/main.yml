@@ -1,15 +1,15 @@
 --- 
- - name: install mysql
-   command: "{{ item }}"
-   with_items:
-     - wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm -P /root
-     - sudo rpm -ivh /root/mysql-community-release-el7-5.noarch.rpm
-     - sudo yum update
-     - sudo yum install mysql-server
+- name: install mysql
+ command: "{{ item }}"
+ with_items:
+   - wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm -P /root
+   - sudo rpm -ivh /root/mysql-community-release-el7-5.noarch.rpm
+   - sudo yum update
+   - sudo yum install mysql-server
 
- - name: move old mysql file
-   command: mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 /root
-   when: /var/lib/mysql/ib_logfile0.stat.exists or /var/lib/mysql/ib_logfile1.stat.exists
+- name: move old mysql file
+ command: mv /var/lib/mysql/ib_logfile0 /var/lib/mysql/ib_logfile1 /root
+ when: /var/lib/mysql/ib_logfile0.stat.exists or /var/lib/mysql/ib_logfile1.stat.exists
 
 - name: configure mysqld
   template: src=my.cnf dest=/etc/my.cnf
@@ -29,7 +29,7 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Sets the root password
-  mysql_user: user=root password="p@ssw0rd" host=localhost
+  mysql_user: user=root password="Vega@123" host=localhost
 
 - name: Install mysql JDBC driver
   command: "{{ item }}"
@@ -42,6 +42,7 @@
 - name: create mysql databases
   command: mysql -u root -pp@ssw0rd -e "create database {{ item }} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci";
   with_items:
+    - cdh
     - scm
     - amon
     - rman
@@ -56,6 +57,7 @@
 - name: create mysql users
   command: mysql -u root -pp@ssw0rd  -e "GRANT ALL ON {{ item }}.* TO '{{ item }}'@'%' IDENTIFIED BY 'p@ssw0rd'"
   with_items:
+    - cdh
     - scm
     - amon
     - rman
@@ -69,6 +71,7 @@
 - name: update password users
   command: mysql -u root -pp@ssw0rd  -e "UPDATE mysql.user SET password=PASSWORD('p@ssw0rd') WHERE user='{{ item }}' AND Host='localhost';"
   with_items:
+    - cdh
     - scm
     - amon
     - rman
@@ -84,9 +87,9 @@
 
 - name: Deletes anonymous MySQL server user for localhost
   mysql_user: user="" state="absent"
-
+#
 - name: flush privileges mysql
-  command: mysql -u root -pp@ssw0rd  -e "FLUSH PRIVILEGES;"
+  command: mysql -u root -pVega@123  -e "FLUSH PRIVILEGES;"
 
 
 
