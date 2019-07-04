@@ -1,0 +1,13 @@
+---
+- hosts: cloudera_servers
+  gather_facts: yes
+  remote_user: root
+  become: no
+  tasks:  
+    - name: Copy file with owner and permissions
+      copy:
+        src: /etc/hosts
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0644'
